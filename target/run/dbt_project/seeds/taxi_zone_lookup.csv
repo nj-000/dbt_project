@@ -1,0 +1,11 @@
+
+    
+    
+    truncate table "taxi_rides_ny"."dev"."taxi_zone_lookup";
+    -- dbt seed --
+    
+          COPY "taxi_rides_ny"."dev"."taxi_zone_lookup" FROM '/usr/app/dbt/seeds/taxi_zone_lookup.csv' (FORMAT CSV, HEADER TRUE, DELIMITER ',')
+        
+
+;
+  

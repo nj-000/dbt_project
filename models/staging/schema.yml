@@ -1,0 +1,23 @@
+version: 2
+
+models:
+
+  # =========================================
+  # STAGING MODELS
+  # =========================================
+
+  - name: stg_green_tripdata
+    description: Standardized green taxi trip data
+    columns:
+      - name: pickup_datetime
+        description: Timestamp when trip started
+        data_tests:
+          - not_null
+
+  - name: stg_yellow_tripdata
+    description: Standardized yellow taxi trip data
+    columns:
+      - name: pickup_datetime
+        description: Timestamp when trip started
+        data_tests:
+          - not_null

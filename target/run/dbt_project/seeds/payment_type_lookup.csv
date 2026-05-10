@@ -1,0 +1,11 @@
+
+    
+    
+    truncate table "taxi_rides_ny"."dev"."payment_type_lookup";
+    -- dbt seed --
+    
+          COPY "taxi_rides_ny"."dev"."payment_type_lookup" FROM '/usr/app/dbt/seeds/payment_type_lookup.csv' (FORMAT CSV, HEADER TRUE, DELIMITER ',')
+        
+
+;
+  

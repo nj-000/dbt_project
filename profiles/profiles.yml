@@ -1,0 +1,53 @@
+taxi_rides_ny:
+  target: dev
+  outputs:
+    # DuckDB Development profile - LOCAL DATABASE
+    dev:
+      type: duckdb
+      # for local database: path: /data/taxi_rides_ny.duckdb  # FIXED: Points to local file created by ingest.py
+      path: md:taxi_rides_ny
+      schema: dev
+      threads: 1
+      token: "{{ env_var('MOTHERDUCK_TOKEN') }}"
+      extensions:
+        - parquet
+      settings:
+        memory_limit: '2GB'
+        preserve_insertion_order: false
+
+    # DuckDB Production profile - LOCAL DATABASE
+    prod:
+      type: duckdb
+      # for local database: path: /data/taxi_rides_ny.duckdb  # FIXED: Points to local file
+      path: md:taxi_rides_ny
+      schema: prod
+      threads: 1
+      token: "{{ env_var('MOTHERDUCK_TOKEN') }}"
+      extensions:
+        - parquet
+      settings:
+        memory_limit: '2GB'
+        preserve_insertion_order: false
+
+# IMPORTANT NOTES:
+# ===============
+# This configuration uses LOCAL DuckDB, same as ingest.py creates.
+# If running in Docker:
+#   - ingest.py creates /data/taxi_rides_ny.duckdb
+#   - dbt also uses /data/taxi_rides_ny.duckdb (via volume mount)
+#   - Both can see the same database!
+#
+# If running locally (without Docker):
+#   - Change path to: ./taxi_rides_ny.duckdb
+#   - ingest.py creates taxi_rides_ny.duckdb in project root
+#   - dbt also looks in project root
+#
+# To use MotherDuck (cloud) instead:
+#   - Change both "path" to: md:taxi_rides_ny
+#   - Also update ingest.py to use: duckdb.connect("md:taxi_rides_ny?token=" + YOUR_TOKEN)
+#   - Make sure MOTHERDUCK_TOKEN environment variable is set
+#
+# Memory tuning:
+#   - <4GB RAM: memory_limit: '1GB'
+#   - 4-8GB RAM: memory_limit: '2GB' (current)
+#   - 16GB+ RAM: memory_limit: '4GB'

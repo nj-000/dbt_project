@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  # Step 1: Ingest data from source
+  ingest:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+      - .:/data
+    command: sh -c "pip install duckdb requests -q && python ingest.py"
+
+  # Step 2: Run DBT transformations
+  dbt:
+    build: .
+    depends_on:
+      - ingest
+    volumes:
+      - .:/usr/app/dbt
+      - .:/data
+    environment:
+      - MOTHERDUCK_TOKEN=${MOTHERDUCK_TOKEN}
+      - motherduck_token=${MOTHERDUCK_TOKEN}
+      - DBT_PROFILES_DIR=/usr/app/dbt/profiles
+    command: build --target dev
+
+  # Step 3: Verify data and open interactive shell
+  duckdb-shell:
+    image: python:3.11-slim
+    depends_on:
+      - dbt
+    working_dir: /data
+    volumes:
+      - .:/data
+    stdin_open: true
+    tty: true
+    command: sh -c "pip install duckdb -q && python -c \"import duckdb; con = duckdb.connect('md:taxi_rides_ny'); print(con.execute('SHOW ALL TABLES').fetchall())\""
