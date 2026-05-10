@@ -52,7 +52,6 @@ Raw Data Source
 ├── packages.yml              # Package dependencies
 ├── Dockerfile                # Docker image
 ├── docker-compose.yml        # Multi-container setup
-└── Makefile                  # Development commands
 ```
  
 ---
