@@ -57,7 +57,7 @@ Raw Data Source
  
 ---
 
-#### Your MotherDuck Dashboard
+## 🖥️ The MotherDuck UI
 
 **Screenshot: Data Tables in MotherDuck**
 
